@@ -57,3 +57,13 @@ def normalize_integer(value, replacements=None):
         return int(float(value))
     except (ValueError, TypeError):
         return pd.NA
+
+
+def missing_by_group(df, feature, group_by):
+    return (
+        df.groupby(group_by, observed=True)[feature]
+        .apply(lambda s: round(s.isna().mean() * 100, 2))
+        .sort_values()
+        .rename("missing_pct")
+        .to_frame()
+    )
