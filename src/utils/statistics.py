@@ -67,3 +67,72 @@ def missing_by_group(df, feature, group_by):
         .rename("missing_pct")
         .to_frame()
     )
+
+
+import pandas as pd
+
+
+def hierarchical_impute(
+    df: pd.DataFrame,
+    column: str,
+    groups: list[str],
+    strategy: str = "median",
+    verbose: bool = True,
+) -> pd.Series:
+    """
+    Hierarchical missing value imputation.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+    column : str
+        Target column.
+    groups : list[str]
+        Ordered grouping columns.
+    strategy : {"median", "mean", "mode"}
+    verbose : bool
+    """
+
+    before = df[column].isna().sum()
+
+    s = df[column].copy()
+
+    for group in groups:
+
+        if strategy == "median":
+            fill_values = df.groupby(group)[column].transform("median")
+
+        elif strategy == "mean":
+            fill_values = df.groupby(group)[column].transform("mean")
+
+        elif strategy == "mode":
+
+            fill_values = df.groupby(group)[column].transform(
+                lambda x: x.mode().iloc[0] if not x.mode().empty else pd.NA
+            )
+
+        else:
+            raise ValueError("strategy must be 'median', 'mean', or 'mode'")
+
+        s = s.fillna(fill_values)
+
+    # Final fallback
+    if strategy == "median":
+        s = s.fillna(s.median())
+
+    elif strategy == "mean":
+        s = s.fillna(s.mean())
+
+    else:
+        mode = s.mode()
+        if not mode.empty:
+            s = s.fillna(mode.iloc[0])
+
+    after = s.isna().sum()
+
+    if verbose:
+        print(
+            f"{column}: {before:,} -> {after:,} missing " f"({before-after:,} filled)"
+        )
+
+    return s
