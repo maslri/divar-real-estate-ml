@@ -18,30 +18,15 @@ def interpret_cohens_d(d):
 
 
 def normalize_year(value):
-    """
-    Normalize Persian construction year values.
-
-    Examples
-    --------
-    '۱۴۰۲' -> 1402
-    'قبل از ۱۳۷۰' -> 1370
-    NaN -> None
-    """
-
     if pd.isna(value):
         return None
 
-    value = str(value)
+    value = str(value).translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")).strip()
 
-    # Convert Persian digits to English digits
-    value = value.translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789"))
+    if value == "قبل از 1370":
+        return 1370
 
-    match = re.search(r"\d{4}", value)
-
-    if match:
-        return int(match.group())
-
-    return None
+    return int(value)
 
 
 def normalize_integer(value, replacements=None):
