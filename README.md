@@ -1,10 +1,6 @@
 # 🏠 Divar Real Estate Price Prediction
 
-A Machine Learning project developed as part of the **Quera AI Bootcamp – Project 1 (Spring 2026)**.
-
 This project focuses on predicting the **full deposit value** of Iranian real estate rental advertisements using the Divar real estate dataset. The project covers the complete machine learning workflow, from data preprocessing and exploratory data analysis to feature engineering, model selection, hyperparameter optimization, and final model evaluation.
-
-> **Note:** This repository is part of a **team project** completed during the Quera AI Bootcamp.
 
 ---
 
@@ -272,10 +268,6 @@ Possible improvements include:
 
 # 👥 Team
 
-This project was completed as a **team assignment** during the **Quera AI Bootcamp**.
-
 ---
 
 # 📄 License
-
-This repository is intended for educational purposes as part of the Quera AI Bootcamp.
